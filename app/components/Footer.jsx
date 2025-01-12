@@ -6,11 +6,13 @@ const Footer = ({ isDarkMode }) => {
   return (
     <div className="mt-20">
       <div className="text-center">
-        <Image
-          src={isDarkMode ? assets.logo_dark : assets.logo}
-          alt="footer background"
-          className="w-36 mx-auto mb-2"
-        />
+        <span
+          className={`text-3xl font-semibold ${
+            isDarkMode ? "text-white" : "text-black"
+          }`}
+        >
+          Jayasurya
+        </span>
 
         <div className="flex w-max items-center gap-2 mx-auto">
           <Image
@@ -29,18 +31,18 @@ const Footer = ({ isDarkMode }) => {
         <p>2025 Jayasurya. All rights reserved.</p>
         <ul className="flex items-center gap-10 justify-center mt-4 sm:mt-0">
           <li>
-            <a target="_blank" href="">
+            <a target="_blank" href="https://github.com/AutoDictate/">
               GitHub
             </a>
           </li>
           <li>
-            <a target="_blank" href="">
+            <a target="_blank" href="https://www.linkedin.com/in/jayasurya2811/">
               LinkedIn
             </a>
           </li>
           <li>
-            <a target="_blank" href="">
-              Twitter
+            <a target="_blank" href="https://www.instagram.com/_surya.exe/">
+              Instagram
             </a>
           </li>
         </ul>

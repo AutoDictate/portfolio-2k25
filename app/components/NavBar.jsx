@@ -41,12 +41,14 @@ const NavBar = ({ isDarkMode, setIsDarkMode }) => {
           : ""
       }`}
       >
-        <a href="#top">
-          <Image
-            src={isDarkMode ? assets.logo_dark : assets.logo}
-            alt=""
-            className="w-28 cursor-pointer mr-14"
-          />
+        <a href="#top" className="w-28 cursor-pointer mr-14">
+          <span
+            className={`text-3xl font-semibold ${
+              isDarkMode ? "text-white" : "text-black"
+            }`}
+          >
+            Jayasurya
+          </span>
         </a>
 
         <ul

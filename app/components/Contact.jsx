@@ -35,8 +35,8 @@ const Contact = () => {
       whileInView={{ opacity: 1 }}
       transition={{ duration: 1 }}
       id="contact"
-      className='w-full px-[12%] py-10 scroll-mt-20 
-    bg-[url("/footer-bg-color.png")] bg-center bg-no-repeat bg-[length:90%_auto] dark:bg-none'
+      className='w-full px-[12%] py-10 scroll-mt-20
+      bg-[url("/footer-bg-color.png")] bg-center bg-no-repeat bg-[length:90%_auto] dark:bg-none'
     >
       <motion.h4
         initial={{ y: -20, opacity: 0 }}
@@ -62,9 +62,8 @@ const Contact = () => {
         transition={{ duration: 0.5, delay: 0.7 }}
         className="text-center max-w-2xl mx-auto mt-5 mb-12 font-Ovo"
       >
-        To leverage my experience as a Java Engineer in contributing to
-        innovative software development projects. I aim to collaborate with
-        skilled professionals,
+        I'd love to hear from you! If you have any questions, comments, or
+        feedback, please use the form below.
       </motion.p>
 
       <motion.form
@@ -81,7 +80,7 @@ const Contact = () => {
             required
             initial={{ x: -50, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
             className="flex-1 p-3 outline-none border-[0.5px] border-gray-400 rounded-md bg-white mb-6
             dark:bg-darkHover/30 dark:border-white/90"
             name="name"
@@ -93,7 +92,7 @@ const Contact = () => {
             required
             initial={{ x: 50, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.2 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
             className="flex-1 p-3 outline-none border-[0.5px] border-gray-400 rounded-md bg-white mb-6
             dark:bg-darkHover/30 dark:border-white/90"
             name="email"
@@ -106,7 +105,7 @@ const Contact = () => {
           required
           initial={{ y: 100, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.3 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
           className="w-full p-4 outline-none border-[0.5px] border-gray-400 rounded-md bg-white
         dark:bg-darkHover/30 dark:border-white/90"
           name="message"

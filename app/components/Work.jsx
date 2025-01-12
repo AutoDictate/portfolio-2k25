@@ -36,9 +36,8 @@ const Work = ({ isDarkMode }) => {
         transition={{ duration: 0.5, delay: 0.7 }}
         className="text-center max-w-2xl mx-auto mt-5 mb-12 font-Ovo"
       >
-        To leverage my experience as a Java Engineer in contributing to
-        innovative software development projects. I aim to collaborate with
-        skilled professionals,
+        Welcome to my web development services ! Explore a collection of
+        projects showcasing my expertise in backend development
       </motion.p>
 
       <motion.div
@@ -80,7 +79,7 @@ const Work = ({ isDarkMode }) => {
       <motion.a
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 1.1 }}
+        transition={{ duration: 0.5, delay: 0.9 }}
         href=""
         className="w-max flex items-center justify-center gap-2 
       text-gray-700 border-[0.5px] border-gray-400 rounded-full py-3 px-10 mx-auto

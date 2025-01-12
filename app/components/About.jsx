@@ -56,9 +56,12 @@ const About = ({ isDarkMode }) => {
           className="flex-1"
         >
           <p className="mb-10 max-w-2xl font-Ovo">
-            To leverage my experience as a Java Engineer in contributing to
-            innovative software development projects. I aim to collaborate with
-            skilled professionals,
+            I’m a tech adventurer, blending creativity with code to craft
+            seamless digital experiences. Fueled by curiosity and driven by
+            innovation, I thrive on transforming complex ideas into impactful
+            solutions. Whether it’s scaling applications or exploring new tech
+            frontiers, I aim to leave a touch of brilliance in every project I
+            undertake.
           </p>
 
           <motion.ul
@@ -103,12 +106,12 @@ const About = ({ isDarkMode }) => {
           <motion.ul
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.5 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
             className="flex items-center gap-3 sm:gap-5"
           >
             {toolsData.map((tool, index) => (
               <motion.li
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 0.5 }}
                 className="flex items-center justify-center w-12 sm:w-14 
                 aspect-square border border-gray-400 rounded-lg cursor-pointer
                 hover:-translate-y-1 duration-500 "

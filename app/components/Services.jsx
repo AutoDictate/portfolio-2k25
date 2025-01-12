@@ -36,9 +36,9 @@ const Services = () => {
         transition={{ duration: 0.5, delay: 0.7 }}
         className="text-center max-w-2xl mx-auto mt-5 mb-12 font-Ovo"
       >
-        To leverage my experience as a Java Engineer in contributing to
-        innovative software development projects. I aim to collaborate with
-        skilled professionals,
+        I am a Backend Developer from Salem, Tamil Nadu, specializing in Java
+        Spring Boot, REST APIs, database management, and microservices, with a
+        growing proficiency in React JS and Next JS for full-stack development
       </motion.p>
 
       <motion.div
