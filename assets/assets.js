@@ -78,22 +78,22 @@ export const workData = [
   {
     title: "Medical App",
     description: "Mobile App",
-    bgImage: "/images/work-1.png",
+    bgImage: "/work-1.png",
   },
   {
     title: "Astro xplorex",
     description: "Web Application",
-    bgImage: "/images/work-2.png",
+    bgImage: "/work-2.png",
   },
   {
     title: "Back2U",
     description: "Document Retrieval App",
-    bgImage: "/images/work-3.png",
+    bgImage: "/work-3.png",
   },
   {
     title: "Oxfyn-Gaming",
     description: "Web Application",
-    bgImage: "/images/work-4.png",
+    bgImage: "/work-4.png",
   },
 ];
 
