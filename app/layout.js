@@ -12,8 +12,15 @@ const ovo = Ovo({
 });
 
 export const metadata = {
-  title: "Portfolio - Jayasurya",
-  description: "Portfolio for showcasing my work and services",
+  title: "Jayasurya A | Software Engineer",
+  description:
+    "Software Engineer specializing in Java, Spring Boot, microservices, SAP Commerce Cloud, e-commerce, REST APIs, and cloud technologies.",
+  openGraph: {
+    title: "Jayasurya A | Software Engineer",
+    description:
+      "Software Engineer specializing in Java, Spring Boot, microservices, SAP Commerce Cloud, e-commerce, REST APIs, and cloud technologies.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }) {

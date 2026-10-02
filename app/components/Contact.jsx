@@ -1,136 +1,51 @@
-import { assets } from "@/assets/assets";
-import Image from "next/image";
-import React, { useState } from "react";
-import { motion } from "motion/react";
+import { siteConfig } from "../data/portfolio";
 
-const Contact = () => {
-  const [result, setResult] = useState("");
-
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    setResult("Sending....");
-    const formData = new FormData(event.target);
-
-    formData.append("access_key", "70fd1588-d195-4c85-abfd-2870114fc8d8");
-
-    const response = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      setResult("Form Submitted Successfully");
-      event.target.reset();
-    } else {
-      console.log("Error", data);
-      setResult(data.message);
-    }
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-      id="contact"
-      className='w-full px-[12%] py-10 scroll-mt-20
-      bg-[url("/footer-bg-color.png")] bg-center bg-no-repeat bg-[length:90%_auto] dark:bg-none'
-    >
-      <motion.h4
-        initial={{ y: -20, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-        className="text-center mb-2 text-lg font-Ovo"
-      >
-        Connect with me
-      </motion.h4>
-
-      <motion.h2
-        initial={{ y: -20, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="text-center text-5xl font-Ovo"
-      >
-        Get in Touch
-      </motion.h2>
-
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.7 }}
-        className="text-center max-w-2xl mx-auto mt-5 mb-12 font-Ovo"
-      >
-        I'd love to hear from you! If you have any questions, comments, or
-        feedback, please use the form below.
-      </motion.p>
-
-      <motion.form
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.9 }}
-        className="max-w-2xl mx-auto"
-        onSubmit={onSubmit}
-      >
-        <div className="grid grid-cols-auto gap-6 mt-10 mb-8">
-          <motion.input
-            type="text"
-            placeholder="Enter your Name"
-            required
-            initial={{ x: -50, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex-1 p-3 outline-none border-[0.5px] border-gray-400 rounded-md bg-white mb-6
-            dark:bg-darkHover/30 dark:border-white/90"
-            name="name"
-          />
-
-          <input
-            type="email"
-            placeholder="Enter your Email"
-            required
-            initial={{ x: 50, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="flex-1 p-3 outline-none border-[0.5px] border-gray-400 rounded-md bg-white mb-6
-            dark:bg-darkHover/30 dark:border-white/90"
-            name="email"
-          />
-        </div>
-
-        <motion.textarea
-          rows="6"
-          placeholder="Enter your message"
-          required
-          initial={{ y: 100, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="w-full p-4 outline-none border-[0.5px] border-gray-400 rounded-md bg-white
-        dark:bg-darkHover/30 dark:border-white/90"
-          name="message"
-        ></motion.textarea>
-
-        <motion.button
-          type="submit"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-          className="py-3 px-8 w-max flex items-center justify-between gap-2 bg-black/80 
-        text-white rounded-full mx-auto hover:bg-black duration-500 
-        dark:bg-transparent dark:border-[0.5px] dark:hover:bg-darkHover"
-        >
-          Submit Now{" "}
-          <Image
-            src={assets.right_arrow_white}
-            alt="send icon"
-            className="w-5"
-          />
-        </motion.button>
-
-        <p className="mt-4">{result}</p>
-      </motion.form>
-    </motion.div>
-  );
+const socialMarks = {
+  Email: "@",
+  LinkedIn: "in",
+  GitHub: "GH",
 };
 
-export default Contact;
+export default function Contact() {
+  return (
+    <section id="contact" aria-labelledby="contact-title" className="contact-section scroll-mt-24">
+      <div className="contact-panel">
+        <div className="contact-copy">
+          <p className="contact-eyebrow">
+            <span aria-hidden="true" /> Contact
+          </p>
+          <h2 id="contact-title">Let’s connect.</h2>
+          <p className="contact-description">
+            For opportunities, collaborations, or a simple hello, reach out through email or find me online.
+          </p>
+        </div>
+
+        <ul className="contact-links" aria-label="Contact links">
+          {siteConfig.socials.map((social) => {
+            const isExternal = social.href.startsWith("https://");
+
+            return (
+              <li key={social.label}>
+                <a
+                  className="contact-link-card"
+                  href={social.href}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noreferrer" : undefined}
+                >
+                  <span className="contact-link-mark" aria-hidden="true">
+                    {socialMarks[social.label]}
+                  </span>
+                  <span className="contact-link-copy">
+                    <span className="contact-link-label">{social.label}</span>
+                    <strong>{social.value}</strong>
+                  </span>
+                  <span className="contact-link-arrow" aria-hidden="true">↗</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
+  );
+}

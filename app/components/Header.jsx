@@ -1,78 +1,63 @@
 import { assets } from "@/assets/assets";
 import Image from "next/image";
-import React from "react";
-import { motion } from "motion/react";
+import { siteConfig, withBasePath } from "../data/portfolio";
 
-const Header = () => {
+const heroTechnologies = ["Java", "Spring Boot", "SAP Commerce", "Cloud"];
+
+export default function Header() {
   return (
-    <div
-      className="w-11/12 max-w-3xl text-center mx-auto h-screen flex flex-col 
-    justify-center gap-4 items-center"
-    >
-      <motion.div
-        initial={{ scale: 0 }}
-        whileInView={{ scale: 1 }}
-        transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
-      >
-        <Image src={assets.profile_img} alt="" className="rounded-full w-32" />
-      </motion.div>
+    <header id="top" className="hero-section">
+      <div className="hero-container">
+        <div className="hero-copy">
+          <p className="hero-eyebrow">
+            <span className="hero-eyebrow-mark" aria-hidden="true" />
+            {siteConfig.role}
+          </p>
 
-      <motion.h3
-        initial={{ y: -20, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="flex items-end gap-2 text-xl md:text-2xl font-Ovo mb-3"
-      >
-        Hi! I'm Jayasurya{" "}
-        <Image src={assets.hand_icon} alt="" className="w-6" />
-      </motion.h3>
+          <h1 className="hero-title">
+            Hi, I’m
+            <span>{siteConfig.name}</span>
+          </h1>
 
-      <motion.h1
-        initial={{ y: -30, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.5 }}
-        className="text-3xl sm:text-6xl lg:text-[66px] font-Ovo"
-      >
-        Software Developer based in India.
-      </motion.h1>
+          <p className="hero-lede">{siteConfig.tagline}</p>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.7 }}
-        className="max-w-2xl mx-auto font-Ovo"
-      >
-        I'm a passionate developer who loves to code and build things.
-      </motion.p>
+          <ul className="hero-technologies" aria-label="Primary technologies">
+            {heroTechnologies.map((technology) => (
+              <li key={technology}>{technology}</li>
+            ))}
+          </ul>
 
-      <div className="flex flex-col sm:flex-row items-center gap-4 mt-4">
-        <motion.a
-          initial={{ y: 30, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1 }}
-          href="#contact"
-          className="px-10 py-3 border border-white rounded-full flex bg-black
-            text-white items-center gap-2 dark:bg-transparent"
-        >
-          contact me
-          <Image src={assets.right_arrow_white} alt="" className="w-4" />
-        </motion.a>
+          <div className="hero-actions">
+            <a href="#contact" className="hero-button hero-button-primary">
+              Contact me
+              <Image src={assets.right_arrow_white} alt="" className="h-4 w-4" />
+            </a>
+            <a
+              href={withBasePath(siteConfig.resumePath)}
+              download
+              className="hero-button hero-button-secondary"
+            >
+              Download résumé
+              <Image src={assets.download_icon} alt="" className="h-4 w-4" />
+            </a>
+          </div>
+        </div>
 
-        <motion.a
-          initial={{ y: 30, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
-          href="/jayasurya-resume.pdf"
-          download
-          className="px-10 py-3 border rounded-full border-gray-500 flex
-            items-center gap-2 bg-white dark:text-black"
-        >
-          my resume
-          <Image src={assets.download_icon} alt="" className="w-4" />
-        </motion.a>
+        <div className="hero-visual">
+          <div className="hero-portrait-frame">
+            <Image
+              src={assets.user_image}
+              alt="Portrait of Jayasurya A"
+              priority
+              sizes="(max-width: 760px) 70vw, (max-width: 1100px) 38vw, 420px"
+              className="hero-portrait-image"
+            />
+          </div>
+          <span className="hero-visual-orbit" aria-hidden="true" />
+          <span className="hero-visual-spark hero-visual-spark-one" aria-hidden="true" />
+          <span className="hero-visual-spark hero-visual-spark-two" aria-hidden="true" />
+        </div>
       </div>
-    </div>
+    </header>
   );
-};
-
-export default Header;
+}

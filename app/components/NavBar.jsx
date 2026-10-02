@@ -1,168 +1,99 @@
+"use client";
+
 import { assets } from "@/assets/assets";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-const NavBar = ({ isDarkMode, setIsDarkMode }) => {
+const links = [
+  ["About", "about"],
+  ["Experience", "experience"],
+  ["Skills", "skills"],
+  ["Projects", "work"],
+  ["Certifications", "certifications"],
+];
+
+export default function NavBar({ isDarkMode, setIsDarkMode }) {
   const [isScroll, setIsScroll] = useState(false);
-  const sideMenuRef = useRef();
-
-  const openMenu = () => {
-    sideMenuRef.current.style.transform = "translateX(-16rem)";
-  };
-
-  const closeMenu = () => {
-    sideMenuRef.current.style.transform = "translateX(16rem)";
-  };
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    window.addEventListener("scroll", () => {
-      if (scrollY > 50) {
-        setIsScroll(true);
-      } else {
-        setIsScroll(false);
-      }
-    });
+    const handleScroll = () => setIsScroll(window.scrollY > 24);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!isMenuOpen) return undefined;
+
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setIsMenuOpen(false);
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [isMenuOpen]);
+
   return (
-    <>
-      <div
-        className="fixed top-0 right-0 w-11/12 -z-10 translate-y-[-80%] 
-    dark:hidden"
-      >
-        <Image src={assets.header_bg_color} alt="" className="w-full" />
-      </div>
-      <nav
-        className={`w-full fixed px-5 lg:px-8 xl:px-[8%] py-4 flex 
-      justify-between items-center z-50 
-      ${
-        isScroll
-          ? "bg-white bg-opacity-50 backdrop-blur-lg shadow-sm dark:shadow-white/20"
-          : ""
-      }`}
-      >
-        <a href="#top" className="w-28 cursor-pointer mr-14">
-          <span
-            className={`text-3xl font-semibold ${
-              isDarkMode ? "text-white" : "text-black"
-            }`}
-          >
-            Jayasurya
-          </span>
+    <nav aria-label="Main navigation" className={`site-nav-shell${isScroll ? " is-scrolled" : ""}`}>
+      <div className="site-nav">
+        <a href="#top" className="site-nav-brand" aria-label="Jayasurya A, home">
+          <span className="site-nav-brand-mark" aria-hidden="true">J</span>
+          <span>Jayasurya <b>A</b></span>
         </a>
 
-        <ul
-          className={`hidden md:flex items-center gap-6 lg:gap-8
-        rounded-full px-12 py-3 
-        ${
-          isScroll
-            ? ""
-            : "bg-white shadow-sm bg-opacity-50 dark:border dark:border-white/50 dark:bg-transparent"
-        }`}
-        >
-          <li>
-            <a className="font-Ovo" href="#top">
-              Home
-            </a>
-          </li>
-          <li>
-            <a className="font-Ovo" href="#about">
-              About Me
-            </a>
-          </li>
-          <li>
-            <a className="font-Ovo" href="#services">
-              Services
-            </a>
-          </li>
-          <li>
-            <a className="font-Ovo" href="#work">
-              My Work
-            </a>
-          </li>
-          <li>
-            <a className="font-Ovo" href="#contact">
-              Contact me
-            </a>
-          </li>
+        <ul className="site-nav-links">
+          {links.map(([label, id]) => (
+            <li key={id}>
+              <a href={`#${id}`}>{label}</a>
+            </li>
+          ))}
         </ul>
 
-        <div className="flex items-center gap-4">
-          <button onClick={() => setIsDarkMode((prev) => !prev)}>
-            <Image
-              src={isDarkMode ? assets.sun_icon : assets.moon_icon}
-              alt=""
-              className="w-6"
-            />
+        <div className="site-nav-actions">
+          <button
+            type="button"
+            className="site-nav-icon-button"
+            onClick={() => setIsDarkMode((previous) => !previous)}
+            aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            <Image src={isDarkMode ? assets.sun_icon : assets.moon_icon} alt="" className="h-5 w-5" />
           </button>
 
-          <a
-            href="#contact"
-            className="hidden lg:flex items-center gap-3 px-10
-            py-2.5 border border-gray-500 rounded-full ml-4 font-Ovo
-            dark:border-white/50"
-          >
-            Contact{" "}
-            <Image
-              src={isDarkMode ? assets.arrow_icon_dark : assets.arrow_icon}
-              alt=""
-              className="w-3"
-            />{" "}
-          </a>
+          <a href="#contact" className="site-nav-contact">Let’s Connect</a>
 
-          <button className="block md:hidden ml-3" onClick={openMenu}>
-            <Image
-              src={isDarkMode ? assets.menu_white : assets.menu_black}
-              alt=""
-              className="w-6"
-            />
+          <button
+            type="button"
+            className="site-nav-menu-button"
+            onClick={() => setIsMenuOpen((open) => !open)}
+            aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
+          >
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
           </button>
         </div>
 
-        {/* Mobile Menu */}
-
-        <ul
-          ref={sideMenuRef}
-          className="flex md:hidden flex-col gap-4 px-10 py-20 fixed 
-        -right-64 top-0 bottom-0 w-64 z50 h-screen bg-rose-50 transition duration-500 dark:bg-darkHover 
-        dark:text-white"
+        <div
+          id="mobile-navigation"
+          className={`site-nav-mobile-panel${isMenuOpen ? " is-open" : ""}`}
+          aria-hidden={!isMenuOpen}
+          inert={!isMenuOpen}
         >
-          <div className="absolute top-6 right-6" onClick={closeMenu}>
-            <Image
-              src={isDarkMode ? assets.close_white : assets.close_black}
-              alt=""
-              className="w-5 cursor-pointer"
-            />
-          </div>
-          <li>
-            <a className="font-Ovo" onClick={closeMenu} href="#top">
-              Home
-            </a>
-          </li>
-          <li>
-            <a className="font-Ovo" onClick={closeMenu} href="#about">
-              About Me
-            </a>
-          </li>
-          <li>
-            <a className="font-Ovo" onClick={closeMenu} href="#services">
-              Services
-            </a>
-          </li>
-          <li>
-            <a className="font-Ovo" onClick={closeMenu} href="#work">
-              My Work
-            </a>
-          </li>
-          <li>
-            <a className="font-Ovo" onClick={closeMenu} href="#contact">
-              Contact me
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </>
+          <ul>
+            {links.map(([label, id]) => (
+              <li key={id}>
+                <a href={`#${id}`} onClick={() => setIsMenuOpen(false)}>{label}</a>
+              </li>
+            ))}
+          </ul>
+          <a href="#contact" className="site-nav-mobile-contact" onClick={() => setIsMenuOpen(false)}>
+            Contact me
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </nav>
   );
-};
-
-export default NavBar;
+}

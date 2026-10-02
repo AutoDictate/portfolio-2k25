@@ -3,10 +3,13 @@
 import { useEffect, useState } from "react";
 import About from "./components/About";
 import Contact from "./components/Contact";
+import Credentials from "./components/Credentials";
+import Experience from "./components/Experience";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import Learning from "./components/Learning";
 import NavBar from "./components/NavBar";
-import Services from "./components/Services";
+import Skills from "./components/Skills";
 import Work from "./components/Work";
 
 export default function Home() {
@@ -39,8 +42,11 @@ export default function Home() {
       <NavBar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
       <Header isDarkMode={isDarkMode} />
       <About isDarkMode={isDarkMode} />
-      <Services isDarkMode={isDarkMode} />
+      <Experience />
+      <Skills />
       <Work isDarkMode={isDarkMode} />
+      <Credentials />
+      <Learning />
       <Contact isDarkMode={isDarkMode} />
       <Footer isDarkMode={isDarkMode} />
     </>

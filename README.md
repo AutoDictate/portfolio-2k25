@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Jayasurya A — Software Engineer Portfolio
 
-## Getting Started
+A one-page portfolio built with Next.js 15, React 19, Tailwind CSS, and Motion. It uses Next.js static export so the same site can be hosted on Vercel or GitHub Pages.
 
-First, run the development server:
+## Run locally
+
+Install Node.js 20 or later, then run:
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+The static site is generated in `out/`. No runtime environment variables or backend services are needed.
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy to Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Import the repository in Vercel. Vercel detects Next.js and uses `npm run build`; the static export in `out/` is deployed automatically. No environment variables are required.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploy to GitHub Pages
 
-## Deploy on Vercel
+The included `.github/workflows/deploy.yml` workflow builds and deploys the static export when code is pushed to `main`. In the repository settings, set **Pages → Build and deployment → Source** to **GitHub Actions**. If the default branch has a different name, update the workflow trigger.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The workflow sets `NEXT_PUBLIC_BASE_PATH` to the repository path for a project site and to an empty path for a user or organization site. This variable is only needed when building a project site below `https://<owner>.github.io/<repository>/`; leave it unset for local development and Vercel.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Update portfolio information
+
+Edit `app/data/portfolio.js` to update the profile summary, employment history, skills, projects, education, certifications, learning topics, social links, and resume path. Replace the existing file at `public/jayasurya-resume.pdf` to update the resume. Set the GitHub, LinkedIn, and email placeholders in `siteConfig.socials` before publishing them.
