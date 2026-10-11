@@ -1,7 +1,5 @@
-import { Outfit, Ovo } from 'next/font/google';
-
 /** @type {import('tailwindcss').Config} */
-export default {
+const tailwindConfig = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -30,3 +28,5 @@ export default {
   darkMode: 'selector',
   plugins: [],
 };
+
+export default tailwindConfig;
