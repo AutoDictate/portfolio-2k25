@@ -134,6 +134,15 @@ export const projects = [
     ],
   },
   {
+    title: "Healthcare Interoperability R&D",
+    context: "Research & Development · Adhiran Infotech",
+    description:
+      "Contributed to research and development for a healthcare project delivered through HCLTech for Johnson & Johnson. Worked with FHIR, a standard for electronic healthcare information exchange, and used Python for project development and technical tasks. Also worked with Azure Blob Storage for cloud data storage and Azure Functions for serverless workflows, gaining experience with healthcare interoperability concepts and Azure services.",
+    technologies: [
+      "FHIR", "Python", "Azure Blob Storage", "Azure Functions",
+    ],
+  },
+  {
     title: "Payslip Generator",
     context: "Professional work · Techno Kryon",
     description:
