@@ -26,7 +26,7 @@ export default function Skills() {
     >
       <div className="skills-intro">
         <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-rose-700 dark:text-rose-200">Technical toolkit</p>
-        <h2 id="skills-title" className="text-4xl sm:text-5xl font-Ovo">Skills</h2>
+        <h2 id="skills-title" className="text-4xl sm:text-5xl">Skills</h2>
         <p className="mt-4 max-w-2xl text-gray-600 dark:text-white/70">
           Java backend engineering and SAP Commerce up front, with framework, cloud, data and tooling skills grouped below.
         </p>

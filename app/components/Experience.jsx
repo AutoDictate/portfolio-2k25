@@ -7,8 +7,8 @@ export default function Experience() {
       aria-labelledby="experience-title"
       className="w-full px-[8%] lg:px-[12%] py-16 scroll-mt-24"
     >
-      <p className="text-center mb-2 text-lg font-Ovo">Career</p>
-      <h2 id="experience-title" className="text-center text-4xl sm:text-5xl font-Ovo">
+      <p className="text-center mb-2 text-lg">Career</p>
+      <h2 id="experience-title" className="text-center text-4xl sm:text-5xl">
         Experience
       </h2>
       <p className="text-center max-w-2xl mx-auto mt-5 mb-12 text-gray-600 dark:text-white/70">

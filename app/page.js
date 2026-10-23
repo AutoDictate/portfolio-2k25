@@ -8,7 +8,7 @@ import Experience from "./components/Experience";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Learning from "./components/Learning";
-import NavBar from "./components/NavBar";
+import DynamicIsland from "./components/DynamicIsland";
 import Skills from "./components/Skills";
 import Work from "./components/Work";
 
@@ -61,7 +61,7 @@ export default function Home() {
 
   return (
     <>
-      <NavBar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+      <DynamicIsland isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
       <Header isDarkMode={isDarkMode} />
       <About isDarkMode={isDarkMode} />
       <Experience />

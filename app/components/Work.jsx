@@ -7,8 +7,8 @@ export default function Work() {
       aria-labelledby="projects-title"
       className="w-full px-[8%] lg:px-[12%] py-16 scroll-mt-24"
     >
-      <p className="text-center mb-2 text-lg font-Ovo">Selected work</p>
-      <h2 id="projects-title" className="text-center text-4xl sm:text-5xl font-Ovo">
+      <p className="text-center mb-2 text-lg">Selected work</p>
+      <h2 id="projects-title" className="text-center text-4xl sm:text-5xl">
         Projects
       </h2>
       <p className="text-center max-w-2xl mx-auto mt-5 mb-12 text-gray-600 dark:text-white/70">

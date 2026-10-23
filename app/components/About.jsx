@@ -27,8 +27,8 @@ export default function About() {
       aria-labelledby="about-title"
       className="w-full px-[8%] lg:px-[12%] py-16 scroll-mt-24"
     >
-      <p className="text-center mb-2 text-lg font-Ovo">Introduction</p>
-      <h2 id="about-title" className="text-center text-4xl sm:text-5xl font-Ovo">
+      <p className="text-center mb-2 text-lg">Introduction</p>
+      <h2 id="about-title" className="text-center text-4xl sm:text-5xl">
         About me
       </h2>
 

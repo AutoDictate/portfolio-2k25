@@ -11,7 +11,7 @@ export default function Learning() {
         <p className="mb-2 text-sm uppercase tracking-wide text-gray-500 dark:text-white/55">
           Learning & future focus
         </p>
-        <h2 id="learning-title" className="text-3xl sm:text-4xl font-Ovo">
+        <h2 id="learning-title" className="text-3xl sm:text-4xl">
           Currently exploring
         </h2>
         <p className="mt-4 max-w-2xl leading-7 text-gray-700 dark:text-white/75">
