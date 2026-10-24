@@ -133,22 +133,6 @@
   line-height: 1.4;
 }
 
-.skills-more-icon::before {
-  display: grid;
-  width: 2rem;
-  height: 2rem;
-  place-items: center;
-  border: 1px solid color-mix(in srgb, #80677b 20%, transparent);
-  border-radius: 50%;
-  content: "+";
-  font-size: 1.2rem;
-  line-height: 1;
-}
-
-.skills-more[open] .skills-more-icon::before {
-  content: "−";
-}
-
 .skills-grid--secondary {
   margin-top: 0.9rem;
 }
@@ -223,10 +207,6 @@
 
 .dark .skills-more-description {
   color: #d5c4d2;
-}
-
-.dark .skills-more-icon::before {
-  border-color: color-mix(in srgb, #f1d7e7 20%, transparent);
 }
 
 .dark .experience-index {
@@ -712,23 +692,6 @@
   font-weight: 600;
 }
 
-.certifications-more-icon::before {
-  display: grid;
-  width: 1.8rem;
-  height: 1.8rem;
-  place-items: center;
-  border: 1px solid color-mix(in srgb, #8d6f84 18%, transparent);
-  border-radius: 50%;
-  color: #73536d;
-  content: "+";
-  font-size: 1.05rem;
-  line-height: 1;
-}
-
-.certifications-more[open] .certifications-more-icon::before {
-  content: "−";
-}
-
 .certification-grid--additional {
   grid-template-columns: minmax(0, 1fr);
   gap: 0.65rem;
@@ -807,8 +770,7 @@
   color: #c9bacd;
 }
 
-.dark .certifications-more-count,
-.dark .certifications-more-icon::before {
+.dark .certifications-more-count {
   border-color: color-mix(in srgb, #eee1ed 18%, transparent);
   color: #ead4e5;
 }

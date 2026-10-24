@@ -9,13 +9,15 @@
   --text-secondary: #60646c;
   --text-tertiary: #838994;
   --line: rgb(29 29 31 / 9%);
-  --glass-tint: rgb(255 255 255 / 60%);
+  --glass-surface: rgb(255 255 255 / 54%);
+  --glass-surface-strong: rgb(255 255 255 / 68%);
   --glass-edge: rgb(255 255 255 / 72%);
-  --glass-shadow: 0 24px 80px -38px rgb(22 30 45 / 30%), 0 2px 8px rgb(24 32 48 / 6%);
+  --glass-shadow: 0 28px 80px -34px rgb(30 47 78 / 30%), 0 2px 10px rgb(24 32 48 / 8%);
   --accent: #087bff;
   --accent-soft: rgb(0 122 255 / 10%);
-  --island: rgb(11 12 15 / 94%);
-  --island-edge: rgb(255 255 255 / 22%);
+  --island: rgb(239 243 252);
+  --island-ink: #29364d;
+  --island-edge: rgb(255 255 255 / 88%);
   --spring: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -29,18 +31,27 @@ html.dark {
   --text-secondary: #b2b5bd;
   --text-tertiary: #858a95;
   --line: rgb(255 255 255 / 9%);
-  --glass-tint: rgb(39 42 50 / 62%);
-  --glass-edge: rgb(255 255 255 / 16%);
-  --glass-shadow: 0 30px 90px -38px rgb(0 0 0 / 78%), 0 2px 10px rgb(0 0 0 / 25%);
+  --glass-surface: rgb(36 40 50 / 52%);
+  --glass-surface-strong: rgb(39 43 54 / 68%);
+  --glass-edge: rgb(255 255 255 / 25%);
+  --glass-shadow: 0 32px 88px -34px rgb(0 0 0 / 76%), 0 2px 12px rgb(0 0 0 / 28%);
   --accent: #2997ff;
   --accent-soft: rgb(41 151 255 / 16%);
-  --island: rgb(5 6 8 / 92%);
-  --island-edge: rgb(255 255 255 / 20%);
+  --island: rgb(17 23 34);
+  --island-ink: #f5f5f7;
+  --island-edge: rgb(165 190 244 / 28%);
 }
 
 html {
   scroll-padding-top: 6rem;
   scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 body,
@@ -59,9 +70,10 @@ select {
 body {
   min-height: 100vh;
   background:
-    radial-gradient(ellipse at 8% 0%, rgb(135 169 224 / 13%), transparent 38rem),
-    radial-gradient(ellipse at 96% 18%, rgb(194 205 230 / 24%), transparent 34rem),
-    linear-gradient(180deg, var(--page-raised), var(--page) 42rem, var(--page));
+    radial-gradient(ellipse at 12% 4%, rgb(121 165 249 / 24%), transparent 34rem),
+    radial-gradient(ellipse at 91% 16%, rgb(174 156 244 / 23%), transparent 36rem),
+    radial-gradient(ellipse at 28% 64%, rgb(109 205 227 / 13%), transparent 38rem),
+    linear-gradient(180deg, var(--page-raised), var(--page) 44rem, var(--page));
   color: var(--text);
   line-height: 1.58;
   transition: background-color 300ms ease, color 220ms ease;
@@ -69,8 +81,9 @@ body {
 
 html.dark body {
   background:
-    radial-gradient(ellipse at 5% 0%, rgb(43 72 118 / 24%), transparent 38rem),
-    radial-gradient(ellipse at 96% 16%, rgb(74 58 117 / 19%), transparent 36rem),
+    radial-gradient(ellipse at 7% 2%, rgb(46 94 181 / 27%), transparent 36rem),
+    radial-gradient(ellipse at 94% 14%, rgb(106 73 179 / 25%), transparent 38rem),
+    radial-gradient(ellipse at 25% 66%, rgb(29 132 154 / 16%), transparent 40rem),
     linear-gradient(180deg, #15171d, var(--page) 48rem, #101115);
 }
 
@@ -114,148 +127,267 @@ h2 {
   color: var(--text-secondary) !important;
 }
 
+body::before {
+  position: fixed;
+  z-index: 999;
+  inset: 0;
+  background: rgb(26 37 56 / 12%);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  -webkit-backdrop-filter: blur(3px) saturate(92%);
+  backdrop-filter: blur(3px) saturate(92%);
+  transition: opacity 260ms ease, visibility 0s linear 260ms;
+}
+
+body:has(.dynamic-island.is-open)::before {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.dark body::before {
+  background: rgb(0 0 0 / 22%);
+}
+
 .dynamic-island {
   position: fixed;
   z-index: 1000;
   top: max(0.8rem, env(safe-area-inset-top));
   left: 50%;
-  width: min(22.5rem, calc(100vw - 1.25rem));
-  color: #f5f5f7;
+  width: min(28rem, calc(100vw - 1rem));
+  color: var(--island-ink);
+  pointer-events: none;
   transform: translateX(-50%);
+}
+
+.dynamic-island-pill,
+.dynamic-island-panel {
+  pointer-events: auto;
 }
 
 .dynamic-island-pill {
   position: relative;
   display: grid;
-  width: 100%;
-  min-height: 3.65rem;
-  grid-template-columns: 2rem minmax(0, 1fr) 2rem;
+  width: min(9.8rem, calc(100vw - 1.5rem));
+  min-width: min(8.5rem, calc(100vw - 1.5rem));
+  max-width: calc(100vw - 1.5rem);
+  min-height: 2.75rem;
+  grid-template-columns: minmax(0, 1fr) 1.3rem;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.4rem;
   overflow: hidden;
   border: 1px solid var(--island-edge);
   border-radius: 999px;
-  padding: 0.45rem 0.85rem;
+  margin-inline: auto;
+  padding: 0.3rem 0.72rem 0.3rem 0.88rem;
   background:
-    linear-gradient(180deg, rgb(255 255 255 / 15%), transparent 44%),
-    linear-gradient(125deg, rgb(34 36 42 / 92%), var(--island) 58%, rgb(9 10 12 / 96%));
+    radial-gradient(ellipse at 18% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 58%),
+    linear-gradient(180deg, rgb(255 255 255 / 25%), transparent 58%),
+    var(--island);
   box-shadow:
-    0 16px 42px -20px rgb(0 0 0 / 50%),
-    0 2px 8px rgb(0 0 0 / 20%),
-    inset 0 1px 0 rgb(255 255 255 / 28%),
-    inset 0 -1px 0 rgb(0 0 0 / 40%);
-  color: #f5f5f7;
+    0 18px 42px -24px color-mix(in srgb, var(--island-ink) 42%, transparent),
+    0 3px 10px rgb(20 31 55 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 78%),
+    inset 0 -1px 0 color-mix(in srgb, var(--island-ink) 12%, transparent);
+  color: var(--island-ink);
   cursor: pointer;
-  text-align: left;
-  -webkit-backdrop-filter: blur(30px) saturate(180%);
-  backdrop-filter: blur(30px) saturate(180%);
+  text-align: center;
+  -webkit-backdrop-filter: blur(32px) saturate(175%);
+  backdrop-filter: blur(32px) saturate(175%);
   transition:
-    transform 260ms var(--spring),
+    width 480ms var(--spring),
+    grid-template-columns 480ms var(--spring),
+    gap 420ms var(--spring),
+    padding 420ms var(--spring),
+    transform 360ms var(--spring),
     border-color 260ms ease,
-    box-shadow 320ms ease,
-    background-color 240ms ease;
+    box-shadow 360ms ease,
+    background 320ms ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .dynamic-island-pill::before {
   position: absolute;
   inset: 1px 1px auto;
-  height: 48%;
+  height: 52%;
   border-radius: inherit;
-  background: linear-gradient(180deg, rgb(255 255 255 / 12%), transparent);
+  background: linear-gradient(180deg, rgb(255 255 255 / 26%), transparent);
   content: "";
   pointer-events: none;
 }
 
+.dynamic-island-pill > * {
+  position: relative;
+  z-index: 1;
+}
+
 .dynamic-island-pill:hover {
-  border-color: rgb(255 255 255 / 34%);
+  border-color: color-mix(in srgb, var(--accent) 28%, var(--island-edge));
   box-shadow:
-    0 20px 48px -22px rgb(0 0 0 / 58%),
-    0 2px 10px rgb(0 0 0 / 24%),
-    inset 0 1px 0 rgb(255 255 255 / 34%);
+    0 22px 50px -24px color-mix(in srgb, var(--island-ink) 44%, transparent),
+    0 0 28px -18px color-mix(in srgb, var(--accent) 56%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 84%),
+    inset 0 -1px 0 color-mix(in srgb, var(--island-ink) 10%, transparent);
+}
+
+.dynamic-island-pill:hover,
+.dynamic-island.is-open .dynamic-island-pill,
+.dynamic-island-pill:focus-visible {
+  width: min(12rem, calc(100vw - 1.5rem));
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) 1.3rem;
+  gap: 0.55rem;
+  padding-inline: 0.88rem 0.72rem;
+  text-align: left;
+}
+
+.dynamic-island-pill:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--island-edge));
+  background:
+    radial-gradient(ellipse at 82% 0%, color-mix(in srgb, var(--accent) 17%, transparent), transparent 62%),
+    linear-gradient(180deg, rgb(255 255 255 / 28%), transparent 56%),
+    var(--island);
+  box-shadow:
+    0 24px 52px -24px color-mix(in srgb, var(--island-ink) 48%, transparent),
+    0 0 30px -18px color-mix(in srgb, var(--accent) 62%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 86%),
+    inset 0 -1px 0 color-mix(in srgb, var(--island-ink) 10%, transparent);
+}
+
+.dynamic-island.is-open .dynamic-island-pill {
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--island-edge));
+  background:
+    radial-gradient(ellipse at 82% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 62%),
+    linear-gradient(180deg, rgb(255 255 255 / 24%), transparent 56%),
+    var(--island);
+  box-shadow:
+    0 22px 50px -24px color-mix(in srgb, var(--island-ink) 44%, transparent),
+    0 0 28px -18px color-mix(in srgb, var(--accent) 55%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 82%),
+    inset 0 -1px 0 color-mix(in srgb, var(--island-ink) 10%, transparent);
 }
 
 .dynamic-island-pill:active {
-  transform: scale(0.985);
+  transform: translateY(1px);
+  transition-duration: 120ms;
 }
 
-.dynamic-island-indicator {
-  position: relative;
-  display: grid;
-  width: 1.8rem;
-  height: 1.8rem;
-  place-items: center;
-  border: 1px solid rgb(255 255 255 / 15%);
-  border-radius: 50%;
-  background: linear-gradient(145deg, rgb(255 255 255 / 15%), rgb(255 255 255 / 4%));
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 19%), 0 2px 6px rgb(0 0 0 / 24%);
+.dynamic-island-pill:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 72%, white);
+  outline-offset: 4px;
 }
 
-.dynamic-island-indicator > span {
-  width: 0.43rem;
-  height: 0.43rem;
-  border: 1px solid rgb(255 255 255 / 55%);
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #b9f8df, #36d994 62%, #12a66d);
-  box-shadow: 0 0 9px rgb(48 226 155 / 50%);
+.dark .dynamic-island-pill {
+  background:
+    radial-gradient(ellipse at 18% 0%, color-mix(in srgb, var(--accent) 11%, transparent), transparent 58%),
+    linear-gradient(180deg, rgb(255 255 255 / 9%), transparent 58%),
+    var(--island);
+  box-shadow:
+    0 18px 42px -24px rgb(0 0 0 / 68%),
+    0 3px 10px rgb(0 0 0 / 28%),
+    inset 0 1px 0 rgb(255 255 255 / 22%),
+    inset 0 -1px 0 rgb(0 0 0 / 24%);
+}
+
+.dark .dynamic-island-pill::before {
+  background: linear-gradient(180deg, rgb(255 255 255 / 9%), transparent);
+}
+
+.dark .dynamic-island-pill:hover,
+.dark .dynamic-island.is-open .dynamic-island-pill,
+.dark .dynamic-island-pill:focus-visible {
+  background:
+    radial-gradient(ellipse at 82% 0%, color-mix(in srgb, var(--accent) 15%, transparent), transparent 62%),
+    linear-gradient(180deg, rgb(255 255 255 / 11%), transparent 56%),
+    var(--island);
+  box-shadow:
+    0 22px 50px -24px rgb(0 0 0 / 72%),
+    0 0 28px -18px color-mix(in srgb, var(--accent) 52%, transparent),
+    inset 0 1px 0 rgb(255 255 255 / 25%),
+    inset 0 -1px 0 rgb(0 0 0 / 20%);
 }
 
 .dynamic-island-current {
-  display: flex;
+  position: relative;
+  z-index: 1;
+  display: block;
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+  height: 1.5rem;
   min-width: 0;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.14rem;
-  line-height: 1.1;
-}
-
-.dynamic-island-caption {
-  color: rgb(255 255 255 / 58%);
-  font-size: 0.55rem;
-  font-weight: 650;
-  letter-spacing: 0.105em;
+  overflow: hidden;
+  line-height: 1;
+  pointer-events: none;
 }
 
 .dynamic-island-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: flex;
+  min-width: 0;
+  width: max-content;
+  max-width: 100%;
   align-items: center;
-  gap: 0.42rem;
-  color: #fff;
-  font-size: 0.88rem;
+  color: var(--island-ink);
+  font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  transition: left 480ms var(--spring), transform 480ms var(--spring);
   animation: island-label-arrive 240ms var(--spring) both;
 }
 
-.dynamic-island-section-icon {
-  width: 0.95rem;
-  height: 0.95rem;
-  flex: 0 0 auto;
-  color: rgb(255 255 255 / 76%);
+.dynamic-island-label-text {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dynamic-island-pill:hover .dynamic-island-label,
+.dynamic-island.is-open .dynamic-island-label,
+.dynamic-island-pill:focus-visible .dynamic-island-label {
+  left: 0;
+  transform: translateY(-50%);
 }
 
 .dynamic-island-chevron {
-  width: 1.55rem;
-  height: 1.55rem;
-  padding: 0.28rem;
-  border: 1px solid rgb(255 255 255 / 12%);
+  grid-column: 2;
+  grid-row: 1;
+  width: 1.3rem;
+  height: 1.3rem;
+  justify-self: end;
+  padding: 0.26rem;
+  border: 1px solid color-mix(in srgb, var(--island-ink) 10%, transparent);
   border-radius: 50%;
-  background: rgb(255 255 255 / 7%);
-  color: rgb(255 255 255 / 80%);
-  transition: transform 440ms var(--spring), background-color 180ms ease;
-}
-
-.dynamic-island:hover .dynamic-island-chevron {
-  background: rgb(255 255 255 / 13%);
+  background: color-mix(in srgb, var(--island-ink) 6%, transparent);
+  color: var(--island-ink);
+  transition: transform 480ms var(--spring), background-color 240ms ease, border-color 240ms ease, box-shadow 300ms ease;
 }
 
 .dynamic-island.is-open .dynamic-island-chevron {
   transform: rotate(180deg);
 }
 
+.dynamic-island-pill:hover .dynamic-island-chevron,
+.dynamic-island-pill:focus-visible .dynamic-island-chevron {
+  border-color: color-mix(in srgb, var(--accent) 28%, var(--island-edge));
+  background: color-mix(in srgb, var(--accent) 13%, transparent);
+  box-shadow: 0 0 18px -12px var(--accent);
+}
+
 .dynamic-island-panel {
   display: grid;
-  max-height: min(72svh, 37rem);
+  max-height: min(72svh, 26rem);
   grid-template-rows: 0fr;
   margin-top: 0;
   overflow: hidden;
@@ -264,11 +396,11 @@ h2 {
   transform: translateY(-0.5rem) scale(0.965);
   transform-origin: top center;
   transition:
-    grid-template-rows 480ms var(--spring),
-    margin-top 480ms var(--spring),
-    opacity 220ms ease,
-    transform 420ms var(--spring),
-    visibility 0s linear 480ms;
+    grid-template-rows 560ms var(--spring),
+    margin-top 560ms var(--spring),
+    opacity 280ms ease,
+    transform 520ms var(--spring),
+    visibility 0s linear 560ms;
   visibility: hidden;
 }
 
@@ -284,90 +416,90 @@ h2 {
 
 .dynamic-island-panel-surface {
   position: relative;
+  isolation: isolate;
   min-height: 0;
+  max-height: inherit;
   overflow: auto;
   border: 1px solid var(--glass-edge);
-  border-radius: 1.65rem;
-  padding: 1.15rem;
+  border-radius: 1.55rem;
+  padding: 0.72rem;
   background:
-    radial-gradient(ellipse at 5% 0%, rgb(255 255 255 / 48%), transparent 60%),
-    linear-gradient(145deg, rgb(255 255 255 / 75%), rgb(242 245 250 / 61%));
+    radial-gradient(ellipse at 8% 0%, rgb(255 255 255 / 12%), transparent 62%),
+    radial-gradient(ellipse at 100% 100%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
+    linear-gradient(145deg, rgb(250 252 255 / 98%), rgb(233 240 251 / 97%));
   box-shadow:
     var(--glass-shadow),
-    inset 0 1px 0 rgb(255 255 255 / 87%),
-    inset 0 -1px 0 rgb(255 255 255 / 28%);
+    inset 0 1px 0 rgb(255 255 255 / 78%),
+    inset 0 -1px 0 rgb(255 255 255 / 34%);
   color: var(--text);
-  -webkit-backdrop-filter: blur(38px) saturate(185%) brightness(1.04);
-  backdrop-filter: blur(38px) saturate(185%) brightness(1.04);
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--text-tertiary) 35%, transparent) transparent;
+  -webkit-backdrop-filter: blur(36px) saturate(210%) brightness(1.08);
+  backdrop-filter: blur(36px) saturate(210%) brightness(1.08);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.dark .dynamic-island-panel-surface {
-  border-color: rgb(255 255 255 / 17%);
+.dynamic-island-panel-surface::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.dynamic-island-panel-surface::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
   background:
-    radial-gradient(ellipse at 5% 0%, rgb(255 255 255 / 11%), transparent 60%),
-    linear-gradient(145deg, rgb(42 45 54 / 85%), rgb(25 27 34 / 80%));
+    linear-gradient(155deg, rgb(255 255 255 / 18%), transparent 38%, rgb(255 255 255 / 3%));
+  content: "";
+  pointer-events: none;
+}
+
+.dynamic-island-links,
+.dynamic-island-panel-footer {
+  position: relative;
+  z-index: 1;
+}
+
+.dynamic-island-links > li {
+  min-width: 0;
+  opacity: 1;
+}
+
+.dynamic-island.is-open .dynamic-island-links > li {
+  animation: island-link-arrive 460ms var(--spring) both;
+}
+
+.dynamic-island.is-open .dynamic-island-links > li:nth-child(2) { animation-delay: 28ms; }
+.dynamic-island.is-open .dynamic-island-links > li:nth-child(3) { animation-delay: 56ms; }
+.dynamic-island.is-open .dynamic-island-links > li:nth-child(4) { animation-delay: 84ms; }
+.dynamic-island.is-open .dynamic-island-links > li:nth-child(5) { animation-delay: 112ms; }
+.dynamic-island.is-open .dynamic-island-links > li:nth-child(6) { animation-delay: 140ms; }
+.dynamic-island.is-open .dynamic-island-links > li:nth-child(7) { animation-delay: 168ms; }
+.dynamic-island.is-open .dynamic-island-links > li:nth-child(8) { animation-delay: 196ms; }
+
+.dark .dynamic-island-panel-surface {
+  border-color: rgb(255 255 255 / 25%);
+  background:
+    radial-gradient(ellipse at 8% 0%, rgb(255 255 255 / 8%), transparent 62%),
+    radial-gradient(ellipse at 100% 100%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 60%),
+    linear-gradient(145deg, rgb(35 41 54 / 99%), rgb(16 19 27 / 98%));
   box-shadow:
     var(--glass-shadow),
     inset 0 1px 0 rgb(255 255 255 / 17%),
-    inset 0 -1px 0 rgb(255 255 255 / 5%);
-  -webkit-backdrop-filter: blur(42px) saturate(165%);
-  backdrop-filter: blur(42px) saturate(165%);
+    inset 0 -1px 0 rgb(255 255 255 / 7%);
+  -webkit-backdrop-filter: blur(42px) saturate(190%);
+  backdrop-filter: blur(42px) saturate(190%);
 }
 
-.dynamic-island-panel-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin: 0 0 0.75rem;
-}
-
-.dynamic-island-panel-heading h2 {
-  margin: 0.15rem 0 0;
-  color: var(--text);
-  font-size: 1.28rem;
-  font-weight: 650;
-  letter-spacing: -0.04em;
-  line-height: 1.15;
-}
-
-.dynamic-island-panel-overline {
-  color: var(--text-tertiary);
-  font-size: 0.56rem;
-  font-weight: 700;
-  letter-spacing: 0.115em;
-}
-
-.dynamic-island-live-status {
-  display: inline-flex;
-  min-height: 1.7rem;
-  align-items: center;
-  gap: 0.38rem;
-  border: 1px solid color-mix(in srgb, var(--accent) 13%, transparent);
-  border-radius: 999px;
-  padding: 0.25rem 0.55rem;
-  background: color-mix(in srgb, var(--accent) 7%, transparent);
-  color: var(--text-secondary);
-  font-size: 0.67rem;
-  font-weight: 550;
-  white-space: nowrap;
-}
-
-.dynamic-island-live-status > span {
-  width: 0.35rem;
-  height: 0.35rem;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 0.16rem color-mix(in srgb, var(--accent) 15%, transparent);
+.dark .dynamic-island-panel-surface::before {
+  background: linear-gradient(155deg, rgb(255 255 255 / 7%), transparent 38%, rgb(255 255 255 / 2%));
 }
 
 .dynamic-island-links {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.3rem;
+  gap: 0.38rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -376,13 +508,16 @@ h2 {
 .dynamic-island-links a {
   position: relative;
   display: flex;
-  min-height: 2.8rem;
+  min-width: 0;
+  min-height: 2.9rem;
   align-items: center;
   gap: 0.55rem;
-  border: 1px solid transparent;
-  border-radius: 0.85rem;
-  padding: 0.5rem 0.6rem;
-  color: var(--text-secondary);
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 7%);
+  border-radius: 1rem;
+  padding: 0.5rem 0.62rem;
+  background: rgb(255 255 255 / 10%);
+  color: var(--text);
   font-size: 0.82rem;
   font-weight: 550;
   line-height: 1.2;
@@ -391,32 +526,50 @@ h2 {
     background-color 180ms ease,
     border-color 180ms ease,
     color 180ms ease,
-    transform 240ms var(--spring);
+    transform 320ms var(--spring),
+    box-shadow 260ms ease,
+    filter 260ms ease;
 }
 
 .dynamic-island-links a:hover {
   transform: translateY(-1px);
-  border-color: color-mix(in srgb, var(--text) 7%, transparent);
-  background: color-mix(in srgb, var(--text) 5%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--glass-edge));
+  background: color-mix(in srgb, var(--accent) 12%, var(--glass-surface-strong));
+  box-shadow: 0 8px 22px -14px color-mix(in srgb, var(--accent) 46%, transparent), inset 0 1px 0 rgb(255 255 255 / 42%);
   color: var(--text);
 }
 
+.dynamic-island-links a:active {
+  transform: translateY(1px);
+  transition-duration: 110ms;
+}
+
 .dynamic-island-links a.is-active {
-  border-color: color-mix(in srgb, var(--accent) 18%, transparent);
-  background: var(--accent-soft);
+  border-color: color-mix(in srgb, var(--accent) 36%, transparent);
+  background: color-mix(in srgb, var(--accent) 13%, var(--glass-surface-strong));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 38%), 0 5px 16px -12px var(--accent);
   color: var(--accent);
 }
 
 .dynamic-island-links a .dynamic-island-section-icon {
   width: 1.05rem;
   height: 1.05rem;
-  color: var(--text-tertiary);
+  flex: 0 0 1.05rem;
+  color: var(--text-secondary);
   transition: color 180ms ease, transform 300ms var(--spring);
+}
+
+.dynamic-island-links a > span:not(.dynamic-island-link-active) {
+  min-width: 0;
+  overflow: hidden;
+  flex: 1 1 auto;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dynamic-island-links a:hover .dynamic-island-section-icon {
   transform: scale(1.06);
-  color: var(--text-secondary);
+  color: var(--accent);
 }
 
 .dynamic-island-links a.is-active .dynamic-island-section-icon {
@@ -424,55 +577,51 @@ h2 {
 }
 
 .dynamic-island-link-active {
-  width: 0.32rem;
-  height: 0.32rem;
+  width: 0.38rem;
+  height: 0.38rem;
   margin-left: auto;
   flex: 0 0 auto;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 0 0.16rem color-mix(in srgb, var(--accent) 14%, transparent);
+  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--accent) 18%, transparent), 0 0 0.65rem color-mix(in srgb, var(--accent) 38%, transparent);
 }
 
 .dynamic-island-panel-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.6rem;
-  margin-top: 0.75rem;
-  padding-top: 0.7rem;
-  border-top: 1px solid color-mix(in srgb, var(--text) 9%, transparent);
+  justify-content: flex-end;
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid color-mix(in srgb, var(--text) 8%, transparent);
 }
 
-.dynamic-island-theme,
-.dynamic-island-contact {
-  display: inline-flex;
-  min-height: 2.55rem;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border: 0;
-  border-radius: 0.8rem;
-  padding: 0.45rem 0.55rem;
-  background: transparent;
+.dynamic-island-theme {
+  display: grid;
+  width: 2.45rem;
+  height: 2.45rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+  border-radius: 50%;
+  padding: 0;
+  background: color-mix(in srgb, var(--glass-surface-strong) 72%, transparent);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 70%);
   color: var(--text-secondary);
   cursor: pointer;
   font-family: inherit;
-  font-size: 0.73rem;
-  font-weight: 550;
-  line-height: 1.2;
-  text-decoration: none;
-  transition: background-color 180ms ease, color 180ms ease, transform 240ms var(--spring);
+  transition: background-color 220ms ease, border-color 220ms ease, color 220ms ease, box-shadow 260ms ease, transform 320ms var(--spring);
 }
 
-.dynamic-island-theme:hover,
-.dynamic-island-contact:hover {
-  background: color-mix(in srgb, var(--text) 5%, transparent);
-  color: var(--text);
+.dynamic-island-theme:hover {
+  transform: translateY(-1px) scale(1.04);
+  border-color: color-mix(in srgb, var(--accent) 44%, var(--glass-edge));
+  background: color-mix(in srgb, var(--accent) 18%, var(--glass-surface-strong));
+  box-shadow: 0 8px 18px -12px color-mix(in srgb, var(--accent) 75%, transparent), inset 0 1px 0 #fff;
+  color: var(--accent);
 }
 
-.dynamic-island-theme:active,
-.dynamic-island-contact:active {
-  transform: scale(0.97);
+.dynamic-island-theme:active {
+  transform: scale(0.91);
+  transition-duration: 100ms;
 }
 
 .dynamic-island-appearance-icon {
@@ -480,42 +629,6 @@ h2 {
   height: 1.05rem;
   flex: 0 0 auto;
   color: var(--text-secondary);
-}
-
-.dynamic-island-switch {
-  position: relative;
-  width: 1.9rem;
-  height: 1.15rem;
-  margin-left: 0.05rem;
-  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--text) 13%, transparent);
-  transition: background-color 220ms ease, border-color 220ms ease;
-}
-
-.dynamic-island-switch > span {
-  position: absolute;
-  top: 0.12rem;
-  left: 0.12rem;
-  width: 0.8rem;
-  height: 0.8rem;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 20%);
-  transition: transform 260ms var(--spring);
-}
-
-.dynamic-island-switch.is-on {
-  border-color: color-mix(in srgb, var(--accent) 62%, transparent);
-  background: var(--accent);
-}
-
-.dynamic-island-switch.is-on > span {
-  transform: translateX(0.74rem);
-}
-
-.dynamic-island-contact {
-  color: var(--accent);
 }
 
 .dynamic-island a:focus-visible,
@@ -562,7 +675,7 @@ h2 {
 .hero-eyebrow,
 .dark .hero-eyebrow {
   border-color: color-mix(in srgb, var(--accent) 16%, transparent);
-  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  background: var(--glass-surface-strong);
   color: var(--accent);
   box-shadow: 0 1px 2px rgb(0 0 0 / 4%), inset 0 1px 0 rgb(255 255 255 / 72%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
@@ -582,7 +695,7 @@ h2 {
 .hero-technologies li,
 .dark .hero-technologies li {
   border-color: var(--line);
-  background: color-mix(in srgb, var(--surface) 76%, transparent);
+  background: var(--glass-surface);
   color: var(--text-secondary);
   box-shadow: 0 2px 8px rgb(20 30 50 / 4%);
 }
@@ -597,15 +710,16 @@ h2 {
 
 .hero-button-primary:hover,
 .dark .hero-button-primary:hover {
+  transform: translateY(-2px) scale(1.025);
   background: linear-gradient(180deg, #3992ff, #147bfa);
-  box-shadow: 0 12px 24px -12px rgb(0 94 211 / 72%), inset 0 1px 0 rgb(255 255 255 / 32%);
+  box-shadow: 0 18px 30px -14px rgb(0 94 211 / 70%), 0 0 24px -12px color-mix(in srgb, var(--accent) 82%, transparent), inset 0 1px 0 rgb(255 255 255 / 44%);
   color: #fff;
 }
 
 .hero-button-secondary,
 .dark .hero-button-secondary {
   border-color: var(--line);
-  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  background: var(--glass-surface-strong);
   box-shadow: 0 7px 20px -15px rgb(15 25 42 / 38%), inset 0 1px 0 rgb(255 255 255 / 72%);
   color: var(--text);
   -webkit-backdrop-filter: blur(18px) saturate(145%);
@@ -614,8 +728,10 @@ h2 {
 
 .hero-button-secondary:hover,
 .dark .hero-button-secondary:hover {
+  transform: translateY(-2px) scale(1.025);
   border-color: color-mix(in srgb, var(--accent) 30%, var(--line));
-  background: var(--surface);
+  background: color-mix(in srgb, var(--glass-surface-strong) 88%, var(--accent-soft));
+  box-shadow: 0 16px 30px -20px color-mix(in srgb, var(--accent) 56%, transparent), inset 0 1px 0 rgb(255 255 255 / 86%);
   color: var(--accent);
 }
 
@@ -704,13 +820,12 @@ h2 {
 .certification-card,
 .contact-panel,
 .contact-link-card,
-.skills-more,
 .certifications-more {
   border-color: var(--line) !important;
-  background: color-mix(in srgb, var(--surface) 91%, transparent) !important;
-  box-shadow: 0 9px 28px -22px rgb(15 26 44 / 35%), inset 0 1px 0 rgb(255 255 255 / 60%);
-  -webkit-backdrop-filter: blur(10px) saturate(120%);
-  backdrop-filter: blur(10px) saturate(120%);
+  background: linear-gradient(145deg, var(--glass-surface-strong), var(--glass-surface)) !important;
+  box-shadow: 0 18px 42px -30px rgb(15 26 44 / 38%), inset 0 1px 0 rgb(255 255 255 / 64%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
 }
 
 .dark #about li,
@@ -721,9 +836,8 @@ h2 {
 .dark .certification-card,
 .dark .contact-panel,
 .dark .contact-link-card,
-.dark .skills-more,
 .dark .certifications-more {
-  box-shadow: 0 14px 38px -26px rgb(0 0 0 / 74%), inset 0 1px 0 rgb(255 255 255 / 7%);
+  box-shadow: 0 20px 48px -28px rgb(0 0 0 / 78%), inset 0 1px 0 rgb(255 255 255 / 15%);
 }
 
 #about li,
@@ -733,25 +847,209 @@ h2 {
 .experience-card,
 .certification-card,
 .contact-link-card {
-  transition: transform 280ms var(--spring), box-shadow 280ms ease, border-color 220ms ease, background-color 220ms ease;
+  transition: transform 320ms var(--spring), box-shadow 280ms ease, border-color 220ms ease, background-color 220ms ease, filter 280ms ease;
 }
 
 #about li:hover,
 #work article:hover,
+#learning > div:hover,
 .skill-card:hover,
 .experience-card:hover,
 .certification-card:hover,
 .contact-link-card:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--accent) 24%, var(--line)) !important;
-  box-shadow: 0 16px 34px -24px rgb(26 55 96 / 34%), inset 0 1px 0 rgb(255 255 255 / 70%);
+  transform: translateY(-4px) scale(1.012);
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--glass-edge)) !important;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--glass-surface-strong) 92%, var(--accent) 8%), var(--glass-surface-strong)) !important;
+  box-shadow: 0 22px 38px -22px color-mix(in srgb, var(--accent) 34%, transparent), inset 0 1px 0 rgb(255 255 255 / 80%);
+  filter: saturate(1.12);
+}
+
+.dynamic-island-links a:active,
+.dynamic-island-theme:active,
+.hero-button:active,
+.contact-link-card:active,
+#about li:active,
+#work article:active,
+#learning > div:active,
+.skill-card:active,
+.experience-card:active,
+.certification-card:active,
+.contact-panel:active,
+.certifications-more-summary:active {
+  transform: scale(0.975);
+  transition-duration: 110ms;
+}
+
+.skills-more-summary,
+.certifications-more-summary {
+  -webkit-backdrop-filter: blur(20px) saturate(165%);
+  backdrop-filter: blur(20px) saturate(165%);
+  transition: background-color 220ms ease, border-color 220ms ease, box-shadow 260ms ease;
+}
+
+.skills-more {
+  overflow: visible;
+  border: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  interpolate-size: allow-keywords;
+}
+
+.skills-more::details-content,
+.certifications-more::details-content {
+  block-size: 0;
+  overflow: clip;
+  opacity: 0;
+  transition:
+    block-size 540ms var(--spring),
+    content-visibility 540ms allow-discrete,
+    opacity 320ms ease;
+}
+
+.skills-more[open]::details-content,
+.certifications-more[open]::details-content {
+  block-size: auto;
+  opacity: 1;
+}
+
+@supports not (interpolate-size: allow-keywords) {
+  .skills-more[open] .skills-grid--secondary,
+  .certifications-more[open] .certification-grid--additional {
+    animation: disclosure-content-reveal 480ms ease both;
+  }
+}
+
+.skills-more[open] .skills-grid--secondary > .skill-card,
+.certifications-more[open] .certification-grid--additional > .certification-card {
+  animation: disclosure-card-reveal 320ms ease backwards;
+}
+
+.skills-more[open] .skills-grid--secondary > :nth-child(2),
+.certifications-more[open] .certification-grid--additional > :nth-child(2) { animation-delay: 32ms; }
+.skills-more[open] .skills-grid--secondary > :nth-child(3),
+.certifications-more[open] .certification-grid--additional > :nth-child(3) { animation-delay: 64ms; }
+.skills-more[open] .skills-grid--secondary > :nth-child(4),
+.certifications-more[open] .certification-grid--additional > :nth-child(4) { animation-delay: 96ms; }
+.skills-more[open] .skills-grid--secondary > :nth-child(5),
+.certifications-more[open] .certification-grid--additional > :nth-child(5) { animation-delay: 128ms; }
+.certifications-more[open] .certification-grid--additional > :nth-child(6) { animation-delay: 160ms; }
+.certifications-more[open] .certification-grid--additional > :nth-child(7) { animation-delay: 192ms; }
+.certifications-more[open] .certification-grid--additional > :nth-child(8) { animation-delay: 224ms; }
+.certifications-more[open] .certification-grid--additional > :nth-child(9) { animation-delay: 256ms; }
+
+@keyframes disclosure-content-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes disclosure-card-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.certifications-more {
+  interpolate-size: allow-keywords;
+}
+
+.skills-more-summary {
+  position: relative;
+  border-color: var(--line);
+  background: linear-gradient(145deg, var(--glass-surface-strong), var(--glass-surface));
+  box-shadow: 0 12px 30px -24px rgb(15 26 44 / 46%), inset 0 1px 0 rgb(255 255 255 / 64%);
+  color: var(--text);
+}
+
+.skills-more-title {
+  color: var(--text);
+}
+
+.skills-more-description {
+  color: var(--text-secondary);
+}
+
+.skills-more-summary:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 72%, white);
+  outline-offset: 3px;
+}
+
+.skills-more-icon,
+.certifications-more-icon {
+  position: relative;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--line));
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 8%, var(--glass-surface-strong));
+  color: var(--accent);
+  transition:
+    transform 560ms var(--spring),
+    background-color 260ms ease,
+    border-color 260ms ease,
+    box-shadow 300ms ease;
+}
+
+.skills-more-icon::before,
+.skills-more-icon::after,
+.certifications-more-icon::before,
+.certifications-more-icon::after {
+  position: absolute;
+  width: 0.72rem;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  content: "";
+  transition: transform 420ms var(--spring), opacity 240ms ease;
+}
+
+.skills-more-icon::after,
+.certifications-more-icon::after {
+  transform: rotate(90deg);
+}
+
+.skills-more[open] .skills-more-icon,
+.certifications-more[open] .certifications-more-icon {
+  transform: rotate(180deg);
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--glass-edge));
+  background: color-mix(in srgb, var(--accent) 16%, var(--glass-surface-strong));
+  box-shadow: 0 0 22px -15px var(--accent), inset 0 1px 0 rgb(255 255 255 / 54%);
+}
+
+.skills-more[open] .skills-more-icon::after,
+.certifications-more[open] .certifications-more-icon::after {
+  transform: rotate(90deg) scaleX(0);
+}
+
+.dark .skills-more-summary {
+  background: linear-gradient(145deg, var(--glass-surface-strong), var(--glass-surface));
+  box-shadow: 0 14px 32px -26px rgb(0 0 0 / 78%), inset 0 1px 0 rgb(255 255 255 / 14%);
+}
+
+.dark .skills-more-icon,
+.dark .certifications-more-icon {
+  border-color: color-mix(in srgb, var(--accent) 26%, var(--line));
+  background: color-mix(in srgb, var(--accent) 12%, var(--glass-surface-strong));
+}
+
+.skills-more-summary:hover,
+.certifications-more-summary:hover,
+.skills-more[open] .skills-more-summary,
+.certifications-more[open] .certifications-more-summary {
+  transform: none;
+  border-color: color-mix(in srgb, var(--accent) 32%, var(--glass-edge));
+  background: color-mix(in srgb, var(--glass-surface-strong) 94%, var(--accent) 6%);
+  box-shadow: 0 14px 28px -22px color-mix(in srgb, var(--accent) 55%, transparent), inset 0 1px 0 rgb(255 255 255 / 78%);
 }
 
 .skill-card,
 .dark .skill-card,
 .skill-card--featured,
 .dark .skill-card--featured {
-  background: color-mix(in srgb, var(--surface) 91%, transparent) !important;
+  background: linear-gradient(145deg, var(--glass-surface-strong), var(--glass-surface)) !important;
 }
 
 .skill-card-kicker,
@@ -822,15 +1120,11 @@ h2 {
   color: var(--text-secondary);
 }
 
-.certifications-more-summary:hover,
-.certifications-more[open] .certifications-more-summary,
-.dark .certifications-more-summary:hover,
-.dark .certifications-more[open] .certifications-more-summary {
-  background: var(--accent-soft);
-}
-
 .contact-panel {
-  background-image: linear-gradient(145deg, color-mix(in srgb, var(--surface) 94%, transparent), color-mix(in srgb, var(--page-raised) 94%, transparent)) !important;
+  background-image:
+    radial-gradient(ellipse at 18% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 62%),
+    radial-gradient(ellipse at 100% 100%, color-mix(in srgb, #9d8cff 15%, transparent), transparent 58%),
+    linear-gradient(145deg, var(--glass-surface-strong), var(--glass-surface)) !important;
 }
 
 .contact-panel::after {
@@ -878,7 +1172,21 @@ footer {
 }
 
 footer a {
+  display: inline-flex;
+  border-radius: 0.7rem;
+  transition: color 220ms ease, text-shadow 260ms ease, transform 280ms var(--spring);
   color: var(--text);
+}
+
+footer a:hover {
+  transform: translateY(-2px);
+  color: var(--accent);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 44%, transparent);
+}
+
+footer a:active {
+  transform: scale(0.96);
+  transition-duration: 100ms;
 }
 
 footer p {
@@ -886,31 +1194,37 @@ footer p {
 }
 
 @keyframes island-label-arrive {
-  from { opacity: 0; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes island-link-arrive {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (max-width: 560px) {
   .dynamic-island {
     top: max(0.55rem, env(safe-area-inset-top));
-    width: min(21rem, calc(100vw - 1rem));
+    width: min(28rem, calc(100vw - 1rem));
   }
 
   .dynamic-island-pill {
-    min-height: 3.45rem;
-    grid-template-columns: 1.85rem minmax(0, 1fr) 1.8rem;
-    gap: 0.6rem;
-    padding-inline: 0.7rem;
+    min-height: 2.65rem;
   }
 
-  .dynamic-island-indicator {
-    width: 1.65rem;
-    height: 1.65rem;
+  .dynamic-island-label {
+    font-size: 0.76rem;
+  }
+
+  .dynamic-island-chevron {
+    width: 1.22rem;
+    height: 1.22rem;
   }
 
   .dynamic-island-panel-surface {
     border-radius: 1.35rem;
-    padding: 0.95rem;
+    padding: 0.62rem;
   }
 
   .dynamic-island-links {
@@ -918,21 +1232,15 @@ footer p {
   }
 
   .dynamic-island-links a {
-    min-height: 2.65rem;
+    min-height: 2.72rem;
     gap: 0.42rem;
-    padding-inline: 0.48rem;
+    padding-inline: 0.52rem;
     font-size: 0.77rem;
   }
 
   .dynamic-island-panel-footer {
-    gap: 0.25rem;
-  }
-
-  .dynamic-island-theme,
-  .dynamic-island-contact {
-    gap: 0.38rem;
-    padding-inline: 0.45rem;
-    font-size: 0.68rem;
+    margin-top: 0.35rem;
+    padding-top: 0.35rem;
   }
 
   .hero-section {
@@ -953,18 +1261,14 @@ footer p {
 
   .dynamic-island-links a {
     gap: 0.34rem;
-    padding-inline: 0.38rem;
+    padding-inline: 0.4rem;
     font-size: 0.73rem;
-  }
-
-  .dynamic-island-panel-footer {
-    flex-wrap: wrap;
   }
 }
 
 @media (max-height: 520px) and (max-width: 900px) {
   .dynamic-island-panel {
-    max-height: 64svh;
+    max-height: min(64svh, 22rem);
   }
 }
 
@@ -975,8 +1279,13 @@ footer p {
 }
 
 @media (prefers-reduced-transparency: reduce) {
+  body::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
   .dynamic-island-pill {
-    background: rgb(10 11 13 / 98%);
+    background: var(--island);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }

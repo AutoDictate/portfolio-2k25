@@ -122,14 +122,9 @@ export default function DynamicIsland({ isDarkMode, setIsDarkMode }) {
         aria-expanded={isOpen}
         aria-controls={panelId}
       >
-        <span className="dynamic-island-indicator" aria-hidden="true">
-          <span />
-        </span>
         <span className="dynamic-island-current" aria-live="polite" aria-atomic="true">
-          <span className="dynamic-island-caption">PORTFOLIO · NOW IN</span>
           <span key={activeSection} className="dynamic-island-label">
-            <SectionIcon id={activeSection} />
-            {activeLabel}
+            <span className="dynamic-island-label-text">{activeLabel}</span>
           </span>
         </span>
         <svg viewBox="0 0 20 20" aria-hidden="true" className="dynamic-island-chevron" fill="none">
@@ -144,14 +139,6 @@ export default function DynamicIsland({ isDarkMode, setIsDarkMode }) {
         inert={!isOpen}
       >
         <nav aria-label="Portfolio sections" className="dynamic-island-panel-surface">
-          <div className="dynamic-island-panel-heading">
-            <div>
-              <span className="dynamic-island-panel-overline">QUICK NAVIGATION</span>
-              <h2>Explore</h2>
-            </div>
-            <span className="dynamic-island-live-status"><span /> {activeLabel}</span>
-          </div>
-
           <ul className="dynamic-island-links">
             {sections.map(([label, id]) => (
               <li key={id}>
@@ -174,16 +161,12 @@ export default function DynamicIsland({ isDarkMode, setIsDarkMode }) {
               type="button"
               className="dynamic-island-theme"
               onClick={() => setIsDarkMode((previous) => !previous)}
-              aria-label={isDarkMode ? "Switch to light appearance" : "Switch to dark appearance"}
+              aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+              title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
               aria-pressed={isDarkMode}
             >
               <AppearanceIcon isDarkMode={isDarkMode} />
-              <span>{isDarkMode ? "Dark appearance" : "Light appearance"}</span>
-              <span className={`dynamic-island-switch${isDarkMode ? " is-on" : ""}`} aria-hidden="true"><span /></span>
             </button>
-            <a href="#contact" className="dynamic-island-contact" onClick={() => setIsOpen(false)}>
-              Say hello <span aria-hidden="true">↗</span>
-            </a>
           </div>
         </nav>
       </div>
